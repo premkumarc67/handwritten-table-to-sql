@@ -3,9 +3,13 @@ import pandas as pd
 import io
 from PIL import Image
 import google.generativeai as genai
-from DB_Engine import engine 
+from DB_Engine import engine
+from dotenv import load_dotenv
+import os
 
-api_key = '' 
+load_dotenv() # Load environment variables from .env file
+
+api_key =  os.getenv("google_api_key")
 genai.configure(api_key=api_key)
 model = genai.GenerativeModel('models/gemini-2.5-flash')
 
@@ -30,7 +34,6 @@ submit = st.button("Extract the Data")
 
 # If the button is clicked, fetch data and store in session_state
 if submit:
-
     prompt = """
     Analyze this image of a handwritten table. 
     Extract the data into a clean CSV format.
@@ -51,6 +54,8 @@ if submit:
 
 # st.session_state['csv_data'] = 'Prod date,Exp date,Product Name,Batch No.,pH 1% (1g/99ml)\n04.11.23,04.11.24,DB2 Stabiliser,893,7.17\n04.11.23,04.11.24,DB2 Stabiliser,89651654,7.17\n04.11.23,04.11.24,DB2 Stabiliser,895,7.16\n04.11.23,04.11.24,DB2 Stabiliser,896,7.17\n04.11.23,04.11.24,DB2 Stabiliser,897,7.13\n04.11.23,04.11.24,DB2 Stabiliser,898,7.19'
 
+upload_clicked = False
+
 # CHECK IF DATA EXISTS IN SESSION STATE
 if 'csv_data' in st.session_state:
     csv_data = st.session_state['csv_data']
@@ -59,20 +64,20 @@ if 'csv_data' in st.session_state:
     st.subheader("Preview Data")
     st.text_area("Content", value=csv_data, height=200)
 
-col1, col2 = st.columns(2)
+    col1, col2 = st.columns(2)
 
-with col1:
-    st.download_button(
-        label="Download CSV",
-        data=csv_data,
-        file_name="converted_batch_data.csv",
-        mime="text/csv",
-        use_container_width=True
-    )
+    with col1:
+        st.download_button(
+            label="Download CSV",
+            data=csv_data,
+            file_name="converted_batch_data.csv",
+            mime="text/csv",
+            use_container_width=True
+        )
 
-with col2:
-    # Capture the click event in a variable
-    upload_clicked = st.button("Upload to Database", use_container_width=True)
+    with col2:
+        # Capture the click event in a variable
+        upload_clicked = st.button("Upload to Database", use_container_width=True)
 
 if upload_clicked:
     try:
