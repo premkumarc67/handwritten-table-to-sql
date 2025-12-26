@@ -4,8 +4,8 @@ from urllib.parse import quote_plus
 
 # Credentials
 USER = "postgres"
-PASSWORD = "Red@Mango474"   
-HOST = "db.mmshlebwrugaowdoiqdh.supabase.co"
+PASSWORD = ""   
+HOST = ""
 PORT = 5432
 DBNAME = "postgres"
 
@@ -18,4 +18,5 @@ ENCODED_PASSWORD = quote_plus(PASSWORD)
 # Create engine
 engine = create_engine(
     f"postgresql+psycopg2://{USER}:{ENCODED_PASSWORD}@{HOST}:{PORT}/{DBNAME}"
+
 )
